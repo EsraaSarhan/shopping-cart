@@ -32,6 +32,7 @@
             ],
             "styles": [
               "node_modules/bootstrap/scss/bootstrap.scss",
+              "node_modules/ngx-toastr/toastr.css" ,
               "src/styles.scss"
             ],
             "scripts": [
@@ -110,5 +111,7 @@
       }
     }
   },
-  "defaultProject": "shopping-cart"
+  "cli": {
+    "analytics": "4cf7ad5c-185c-4036-b560-a746f16c3b68"
+  }
 }

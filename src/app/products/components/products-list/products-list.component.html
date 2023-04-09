@@ -1,7 +1,8 @@
 <section class="container">
     <div class="row mt-5">
         <div class="col-12 col-md-6">
-            <h2>{{selectedCategory.value}}</h2>
+            <h2 *ngIf="!selectedCategory.value">All Categories</h2>
+            <h2 *ngIf="selectedCategory.value">{{selectedCategory.value}}</h2>
         </div>
 
         <div class="col-12 col-md-6">
@@ -16,19 +17,19 @@
 <section class="container mt-5">
     <div class="row">
         <div class="col-12 col-sm-6 col-md-3 mb-4" *ngFor="let item of allProducts">
-            <app-product-details [item]="item" (cartUpdated)="onCartUpdated($event)"></app-product-details>
+            <app-product-details [item]="item" (cartUpdated)="onCartUpdated()"></app-product-details>
         </div>
     </div>
 </section>
 
 <section class="container price-section">
     <div class="row justify-content-around">
-        <div class="col-6">
-            Total price: {{totalPrice}}
+        <div class="col-12 text-center">
+            <span>Total price: {{totalPrice}}   </span>         
+             <button (click)="placeOrder()" *ngIf="totalPrice > 0" class="btn btn-outline-danger mx-5">Place Order</button>
+
         </div>
-        <div class="col-6">
-            <button (click)="placeOrder()" *ngIf="totalPrice > 0" class="btn btn-outline-danger">Place Order</button>
-        </div>
+       
     </div>
 </section>
 

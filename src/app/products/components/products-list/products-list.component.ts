@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as _ from 'underscore';
 import { ProductsService } from '../../services/products.service';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ReceiptComponent } from '../receipt/receipt.component';
 
 @Component({
   selector: 'app-products-list',
@@ -16,7 +17,7 @@ export class ProductsListComponent implements OnInit {
   public pageNumber: number = 0;
   public pageSize: number = 30;
   public totalPrice: number = 0;
-  constructor(private productService: ProductsService, private modalService: NgbModal, public modal: NgbActiveModal) {
+  constructor(private productService: ProductsService, private modalService: NgbModal,) {
     this.getCategoriesList();
     this.getAllProducats();
    }
@@ -40,21 +41,7 @@ export class ProductsListComponent implements OnInit {
   getAllProducats(){
     this.productService.getProducts(this.pageNumber, this.pageSize).subscribe(
       res=>{
-        res.products.forEach((element: {
-          discountPercentage: number;
-          price: number; isAddedToCart: boolean; id: any; 
-}) => {
-          element.isAddedToCart = false;
-          let selectedProducts = this.productService.getUserCart();
-          if(selectedProducts && selectedProducts.length>0){
-            let isExist = _.findWhere(selectedProducts, {id: element.id});
-            if(isExist){
-              element.isAddedToCart = true;
-              this.totalPrice +=   Math.round(element.price - element.price * (element.discountPercentage/100));
-            }
-          }
-        });
-        this.allProducts = res.products;
+        this.checkIfProductInCart(res.products);
       },
       err=>{
         console.log(err)
@@ -66,8 +53,7 @@ export class ProductsListComponent implements OnInit {
     if(cat){
       this.productService.filterByCategory(cat).subscribe(
         res=>{
-          console.log(res);
-          this.allProducts = res.products;
+         this.checkIfProductInCart(res.products);
         },
         err=>{
           console.log(err)
@@ -79,12 +65,28 @@ export class ProductsListComponent implements OnInit {
     }
   }
 
+  checkIfProductInCart(products: any){
+    products.forEach((element: {
+      discountPercentage: number;
+      price: number; isAddedToCart: boolean; id: any; 
+}) => {
+      element.isAddedToCart = false;
+      let selectedProducts = this.productService.getUserCart();
+      if(selectedProducts && selectedProducts.length>0){
+        let isExist = _.findWhere(selectedProducts, {id: element.id});
+        if(isExist){
+          element.isAddedToCart = true;
+          this.onCartUpdated();
+        }
+      }
+    });
+    this.allProducts =products;
+  }
   getUserCart(){
     console.log(this.productService.getUserCart());
   }
 
-  onCartUpdated($event: any){
-    console.log($event, "u");
+  onCartUpdated(){
     this.totalPrice = 0;
     let userProducts = this.productService.getUserCart();
     userProducts.forEach((element: {
@@ -96,6 +98,8 @@ export class ProductsListComponent implements OnInit {
   }
 
   placeOrder(){
+    const addModalRef = this.modalService.open(ReceiptComponent, { size: 'lg', backdrop: 'static' });
+    addModalRef.componentInstance.totalPrice = this.totalPrice;
 
   }
 }

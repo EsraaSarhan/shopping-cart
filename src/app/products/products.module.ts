@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgbModule, NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 import { ProductsRoutingModule } from './products-routing.module';
 import { ProductsListComponent } from './components/products-list/products-list.component';
@@ -17,7 +18,7 @@ import { PriceReducedPipe } from './pipes/price-reduced.pipe';
   ],
   imports: [
     CommonModule,
-    ProductsRoutingModule
-  ]
+    ProductsRoutingModule,
+    NgbModule  ]
 })
 export class ProductsModule { }
