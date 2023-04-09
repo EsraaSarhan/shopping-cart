@@ -35,7 +35,7 @@ export class ReceiptComponent implements OnInit {
     });
 
     setTimeout(function(){
-      window.location.href = "/";
+      window.location.href = "/shopping-cart";
     }, 1000);
   }
 }
