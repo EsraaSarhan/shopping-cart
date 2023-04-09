@@ -32,8 +32,10 @@ export class ReceiptComponent implements OnInit {
 
     this.selectedItems.forEach((element: any) => {
       this.productService.updateCart(element, 'remove');
-      window.location.href = "/shopping-cart";
     });
 
+    setTimeout(function(){
+      window.location.href = "/";
+    }, 1000);
   }
 }
